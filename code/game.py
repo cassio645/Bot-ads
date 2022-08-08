@@ -2,7 +2,7 @@ import discord
 import asyncio
 from discord.ext import commands
 from discord.ext.commands import cooldown, BucketType
-from time import sleep
+from time import sleep, strftime, gmtime
 from random import randint, choice
 
 from .lista_de_perguntas import perguntas
@@ -25,6 +25,11 @@ def start_game():
     f = open("partida", "w")
     f.write("1")
     f.close()
+
+
+def pass_to_min(seconds):
+    # convertendo segundos para minutos
+	return strftime("%M:%S", gmtime(seconds))
 
 class Game(commands.Cog):
 
@@ -62,7 +67,7 @@ class Game(commands.Cog):
                             lista.append(i)
                 elif arg.lower() == "emprendedorismo":
                     for i in perguntas:
-                        if perguntas[i]["materia"] == "emprendedorismo":
+                        if perguntas[i]["materia"] == "empreendedorismo":
                             lista.append(i)
                 else:
                     # se a pessoa passar um tema que não existe ele avisa, e finaliza o jogo
@@ -89,8 +94,8 @@ class Game(commands.Cog):
                     cor = (perguntas[pergunta]["cor"])
                     embed_pergunta = discord.Embed(title=f'Pergunta #{n}', description=" ", colour=cor)
                     embed_pergunta.set_image(url=perguntas[pergunta]["pergunta"])
-                    tempo = perguntas[pergunta]["tempo"]
-                    embed_pergunta.set_footer(text=f"Você tem {tempo}s")
+                    tempo = pass_to_min(perguntas[pergunta]["tempo"])
+                    embed_pergunta.set_footer(text=f"Você tem {tempo}min")
                     await ctx.send(embed=embed_pergunta)
 
                     # função que verifica se a resposta esta correta e retorna o conteudo, caso contrario nao faz nada
@@ -100,8 +105,8 @@ class Game(commands.Cog):
                             response = response.lower()
                         except:
                             pass
-                        if response in perguntas[pergunta]["resposta"]:
-                            return msg.content
+                        if response in perguntas[pergunta]["resposta"] or response == ".fim":
+                            return (msg.content).strip()
 
                     # loop infinito para pegar todas as respostas que forem enviadas
                     while True:
@@ -117,6 +122,12 @@ class Game(commands.Cog):
                             await ctx.send(embed=embed_acerto)
                             sleep(5)
                             break
+                        elif response.content == ".fim":
+                            resposta = resposta = perguntas[pergunta]["resposta"][0]
+                            embed_fim = discord.Embed(title="Jogo finalizado", description=f"A resposta era {resposta}\n", colour=0x4682B4)
+                            await ctx.send(embed=embed_fim)
+                            end_game()
+                            return
         
         # ao exceder o tempo de resposta, entra aqui, finaliza o game, e envia a resposta da tal pergunta
         except asyncio.TimeoutError:
