@@ -1,5 +1,5 @@
 perguntas = {
-    "0001": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1005519552874037248/unknown.png", "resposta": ["1"], "materia": "matematica", "tempo": 60},
+    "0001": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006210854276046899/unknown.png", "resposta": ["1", "3^0"], "materia": "matematica", "tempo": 60},
     "0002": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1005519812123959417/unknown.png", "resposta": ["8"], "materia": "matematica", "tempo": 60},
     "0003": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1005520592369352826/unknown.png", "resposta": ["9/25"], "materia": "matematica", "tempo": 60},
     "0004": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1005521235393904740/unknown.png", "resposta": ["2^8", "256"], "materia": "matematica", "tempo": 60},
@@ -11,5 +11,27 @@ perguntas = {
     "0010": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1005579375401500672/unknown.png", "resposta": ["120", "120 alunos"], "materia": "matematica", "tempo": 60},
     "0011": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1005583166637088788/unknown.png", "resposta": ["{10, 11, 14, 15, 20, 25}", "10, 11, 14, 15, 20, 25"], "materia": "matematica", "tempo": 60},
     "0012": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1005583846231777370/unknown.png", "resposta": ["{(1, 4) (1, 5) (2, 4) (2, 5) (3, 4) (3, 5)}", "(1, 4) (1, 5) (2, 4) (2, 5) (3, 4) (3, 5)", "{(1, 4)(1, 5)(2, 4)(2, 5)(3, 4)(3, 5)}", "(1, 4)(1, 5)(2, 4)(2, 5)(3, 4)(3, 5)"], "materia": "matematica", "tempo": 90},
+
+    "0013": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006192213505609728/unknown.png", "resposta": ["economica", "econômica"], "materia": "empreendedorismo", "tempo": 60},
+    "0014": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006192703719092286/unknown.png", "resposta": ["ciências sociais", "das ciências sociais", "ciencias sociais", "das ciencias sociais"], "materia": "empreendedorismo", "tempo": 60},
+    "0015": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006193086084436079/unknown.png", "resposta": ["estudos de gestão", "estudos e gestão", "estudos e gestao", "estudos de gestao", "dos estudos de gestão", "dos estudos de gestão"], "materia": "empreendedorismo", "tempo": 60},
+    "0016": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006193929915465768/unknown.png", "resposta": ["realização", "realizacao", "realizaçao", "realizacão"], "materia": "empreendedorismo", "tempo": 60},
+    "0017": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006194268257394689/unknown.png", "resposta": ["influência", "influencia"], "materia": "empreendedorismo", "tempo": 60},
+    "0018": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006194873369628672/unknown.png", "resposta": ["planejamento"], "materia": "empreendedorismo", "tempo": 60},
+    "0019": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006195589429592074/unknown.png", "resposta": ["nato"], "materia": "empreendedorismo", "tempo": 60},
+    "0020": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006195850072051805/unknown.png", "resposta": ["que aprende", "aprende"], "materia": "empreendedorismo", "tempo": 60},
+    "0021": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006196088304304148/unknown.png", "resposta": ["serial"], "materia": "empreendedorismo", "tempo": 60},
+    "0022": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006196450495053924/unknown.png", "resposta": ["corporativo"], "materia": "empreendedorismo", "tempo": 60},
+    "0023": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006196922765283399/unknown.png", "resposta": ["social"], "materia": "empreendedorismo", "tempo": 60},
+    "0024": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006197159315636265/unknown.png", "resposta": ["por necessidade", "necessidade"], "materia": "empreendedorismo", "tempo": 60},
+    "0025": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006197338752163961/unknown.png", "resposta": ["herdeiro"], "materia": "empreendedorismo", "tempo": 60},
+    "0026": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006197515122647120/unknown.png", "resposta": ['normal', '"normal"'], "materia": "empreendedorismo", "tempo": 60},
+
+    "0027": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006211466208223362/unknown.png", "resposta": ["2/9"], "materia": "matematica", "tempo": 60},
+    "0028": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006212456869265488/unknown.png", "resposta": ["2/3"], "materia": "matematica", "tempo": 60},
+    "0029": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006213274725007471/unknown.png", "resposta": ["25/7"], "materia": "matematica", "tempo": 60},
+    "0030": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006214010204606526/unknown.png", "resposta": ["15/8"], "materia": "matematica", "tempo": 60},
+    "0031": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006214474442747904/unknown.png", "resposta": ["9", "3^2"], "materia": "matematica", "tempo": 60},
+    "0032": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006215374167089152/unknown.png", "resposta": ["64", "2^6"], "materia": "matematica", "tempo": 60},
 
 }
