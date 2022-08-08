@@ -11,7 +11,7 @@ class Manager(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        activity = discord.Game(name=".help", type=3)
+        activity = discord.Game(name=".info", type=3)
         # VERDE Status.online / AMARELO Status.idle/ VERMELHO Status.dnd
         await self.bot.change_presence(status=discord.Status.online, activity=activity)
         print(f"{self.bot.user} is alive")

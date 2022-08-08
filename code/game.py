@@ -86,7 +86,8 @@ class Game(commands.Cog):
                     pergunta = lista[randint(0, len(lista)-1)]
 
                     # cria a msg que vai ser enviada, com o numero da pergunta, a pergunta, e o tempo para responder
-                    embed_pergunta = discord.Embed(title=f'Pergunta #{n}', description=" ")
+                    cor = (perguntas[pergunta]["cor"])
+                    embed_pergunta = discord.Embed(title=f'Pergunta #{n}', description=" ", colour=cor)
                     embed_pergunta.set_image(url=perguntas[pergunta]["pergunta"])
                     tempo = perguntas[pergunta]["tempo"]
                     embed_pergunta.set_footer(text=f"Você tem {tempo}s")

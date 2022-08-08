@@ -11,6 +11,7 @@ bot.remove_command('help')
 
 bot.load_extension("manager")
 bot.load_extension("code.game")
+bot.load_extension("code.help")
 
 
 TOKEN = config("TOKEN")
