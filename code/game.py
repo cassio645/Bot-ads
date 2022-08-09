@@ -142,7 +142,7 @@ class Game(commands.Cog):
                                 sleep(5)
                                 break
                             elif response.content == ".fim":
-                                resposta = resposta = perguntas[pergunta]["resposta"][0]
+                                resposta = perguntas[pergunta]["resposta"][0]
                                 embed_fim = discord.Embed(title="Jogo finalizado", description=f"A resposta era: {resposta}\n", colour=0x4682B4)
                                 await ctx.send(embed=embed_fim)
                                 end_game(str(ctx.channel.id))
