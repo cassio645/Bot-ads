@@ -50,5 +50,12 @@ perguntas = {
     "0047": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006276488066240562/unknown.png", "resposta": ["47"], "materia": "matematica", "cor": 0xFFD700, "tempo": 180},
     "0048": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006276785807294484/unknown.png", "resposta": ["2^2", "4"], "materia": "matematica", "cor": 0xFFD700, "tempo": 300},
     "0049": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006277164561350747/unknown.png", "resposta": ["2"], "materia": "matematica", "cor": 0xFFD700, "tempo": 180},
+    
+    "0050": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006569657370673283/unknown.png", "resposta": ["intraempreendedorismo"], "materia": "empreendedorismo", "cor": 0x4B0082, "tempo": 60},
+    "0051": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006570556251979916/unknown.png", "resposta": ["corporativo", "corporativos"], "materia": "empreendedorismo", "cor": 0x4B0082, "tempo": 60},
+    "0052": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006572759821865061/unknown.png", "resposta": ["clássico", "classico"], "materia": "empreendedorismo", "cor": 0x4B0082, "tempo": 60},
+    "0053": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006573019688341695/unknown.png", "resposta": ["grande vendedor"], "materia": "empreendedorismo", "cor": 0x4B0082, "tempo": 60},
+    "0054": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006573164387651734/unknown.png", "resposta": ["gerente"], "materia": "empreendedorismo", "cor": 0x4B0082, "tempo": 60},
+    "0055": {"pergunta": "https://cdn.discordapp.com/attachments/883810728140734506/1006573450061684746/unknown.png", "resposta": ["criativo"], "materia": "empreendedorismo", "cor": 0x4B0082, "tempo": 60},
 
 }
