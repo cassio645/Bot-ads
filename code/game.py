@@ -4,7 +4,7 @@ import json
 from discord.ext import commands
 from discord.ext.commands import cooldown, BucketType
 from time import sleep, strftime, gmtime
-from random import randint, choice
+from random import shuffle, randint
 
 from .lista_de_perguntas import perguntas
                
@@ -53,7 +53,7 @@ class Game(commands.Cog):
     
 
     @commands.command(name="start", aliases=["estudar"])
-    async def start(self, ctx, *, arg="geral"):
+    async def start(self, ctx, *, arg="empreendedorismo"):
         if ctx.channel.id in self.channels:
             game_channel = ctx.channel.id
             try:
@@ -98,14 +98,22 @@ class Game(commands.Cog):
                         end_game(str(ctx.channel.id))
                         return
 
+                    # mistura as perguntas da lista
+                    shuffle(lista)
+
                     # loop infinito, para sempre gerar novas perguntas, a medida que elas forem sendo respondidas
                     while True:
                         
-                        # aumentando o número do contador de perguntas feitas, sempre vai somando de 1 em 1
-                        n +=1
+                        try:
+                            # TENTA pegar na lista de perguntas a pergunta na posição n
+                            pergunta = lista[n]
+                        except IndexError:
+                            # caso a pessoa já tenha respondido todas as perguntas da lista
+                            # ele passa a pegar repetidas, de modo aleatorio
+                            pergunta = lista[randint(0, len(lista)-1)]
 
-                        # pega na lista de perguntas uma pergunta aleatoria
-                        pergunta = lista[randint(0, len(lista)-1)]
+                        # aumentando o número do contador, sempre vai somando de 1 em 1
+                        n +=1
 
                         # cria a msg que vai ser enviada, com o numero da pergunta, a pergunta, e o tempo para responder
                         cor = (perguntas[pergunta]["cor"])
@@ -156,7 +164,10 @@ class Game(commands.Cog):
                 end_game(str(ctx.channel.id))
                 return 
         else:
-            await ctx.send("Por favor use este comando em <#1005542693528678447>")
+            if ctx.message.guild.id == 1004124654392332490:
+                await ctx.send("Por favor use este comando em <#>")
+            elif ctx.message.guild.id == 1005542693063118858:
+                await ctx.send("Por favor use este comando em <#1005542693528678447>")
 
 
 
