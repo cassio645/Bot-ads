@@ -2,7 +2,6 @@ import discord
 import asyncio
 import json
 from discord.ext import commands
-from discord.ext.commands import cooldown, BucketType
 from time import sleep, strftime, gmtime
 from random import shuffle, randint
 
@@ -53,93 +52,96 @@ class Game(commands.Cog):
     
 
     @commands.command(name="start", aliases=["estudar"])
-    async def start(self, ctx, *, arg="empreendedorismo"):
+    async def start(self, ctx, *, arg="geral"):
         if ctx.channel.id in self.channels:
-            game_channel = ctx.channel.id
-            try:
-                # n é usado como contador, para saber o numero de perguntas já feitas na partida
-                n = 0
+            # n é usado como contador, para saber o numero de perguntas já feitas na partida
+            n = 0
 
-                # checando se já tem alguma partida acontecendo, se tiver ele avisa que o jogo já começou, se não, ele inicia um
-                partida_iniciada = check_partida(str(ctx.channel.id))
-                if partida_iniciada > 0:
-                    await ctx.send("A partida já começou")
+            # checando se já tem alguma partida acontecendo, se tiver ele avisa que o jogo já começou, se não, ele inicia um
+            partida_iniciada = check_partida(str(ctx.channel.id))
+            if partida_iniciada > 0:
+                await ctx.send("A partida já começou")
+            else:
+
+                # iniciando um novo jogo
+                start_game(str(ctx.channel.id))
+
+                # lista vazia que vai conter as perguntas do tema escolhido
+                lista = []
+
+                # se não houver um arg(argumento) na hora de iniciar ele pega todas as perguntas sem filtrar
+                if arg.lower() == "geral":
+                    lista = list(perguntas.keys())
+                
+                # possivel filtro de perguntas "matematica" entao ele verifica e so adiciona as perguntas desse tema
+                elif arg.lower() in ["matematica", "matemática"]:
+                    # passa por TODAS as perguntas da lista de perguntas, se a materia dela for a do filtro ele adiciona na nova lista
+                    for i in perguntas:
+                        if perguntas[i]["materia"] == "matematica":
+                            lista.append(i)
+                elif arg.lower() == "empreendedorismo":
+                    for i in perguntas:
+                        if perguntas[i]["materia"] == "empreendedorismo":
+                            lista.append(i)
                 else:
+                    # se a pessoa passar um tema que não existe ele avisa, e finaliza o jogo
+                    await ctx.send("Tema não encontrado.")
+                    end_game(str(ctx.channel.id))
+                    return
 
-                    # iniciando um novo jogo
-                    start_game(str(ctx.channel.id))
+                # Se a quantidade de itens na lista for menor q 1. Ele avisa que esse tema nao possui perguntas ainda e finaliza.
+                if len(lista) < 1:
+                    await ctx.send("Esse tema ainda não possui perguntas...")
+                    end_game(str(ctx.channel.id))
+                    return
 
-                    # lista vazia que vai conter as perguntas do tema escolhido
-                    lista = []
+                # mistura as perguntas da lista
+                shuffle(lista)
 
-                    # se não houver um arg(argumento) na hora de iniciar ele pega todas as perguntas sem filtrar
-                    if arg.lower() == "geral":
-                        lista = list(perguntas.keys())
-                    
-                    # possivel filtro de perguntas "matematica" entao ele verifica e so adiciona as perguntas desse tema
-                    elif arg.lower() in ["matematica", "matemática"]:
-                        # passa por TODAS as perguntas da lista de perguntas, se a materia dela for a do filtro ele adiciona na nova lista
-                        for i in perguntas:
-                            if perguntas[i]["materia"] == "matematica":
-                                lista.append(i)
-                    elif arg.lower() == "empreendedorismo":
-                        for i in perguntas:
-                            if perguntas[i]["materia"] == "empreendedorismo":
-                                lista.append(i)
+                # loop infinito, para sempre gerar novas perguntas, a medida que elas forem sendo respondidas
+                while True:
+                    try:
+                        # TENTA pegar na lista de perguntas a pergunta na posição n
+                        pergunta = lista[n]
+                    except IndexError:
+                        # caso a pessoa já tenha respondido todas as perguntas da lista
+                        # ele passa a pegar repetidas, de modo aleatorio
+                        pergunta = lista[randint(0, len(lista)-1)]
+
+                    # aumentando o número do contador, sempre vai somando de 1 em 1
+                    n +=1
+
+                    # cria a msg que vai ser enviada, com o numero da pergunta, a pergunta, e o tempo para responder
+                    cor = (perguntas[pergunta]["cor"])
+                    embed_pergunta = discord.Embed(title=f'Pergunta #{n}', description=" ", colour=cor)
+                    embed_pergunta.set_image(url=perguntas[pergunta]["pergunta"])
+
+                    # formatando tempo
+                    tempo = pass_to_min(perguntas[pergunta]["tempo"])
+                    if int(tempo[3:]) > 0:
+                        embed_pergunta.set_footer(text=f"🕔 Tempo para responder {tempo}s")
                     else:
-                        # se a pessoa passar um tema que não existe ele avisa, e finaliza o jogo
-                        await ctx.send("Tema não encontrado.")
-                        end_game(str(ctx.channel.id))
-                        return
+                        embed_pergunta.set_footer(text=f"🕔 Tempo para responder {tempo[:2]}min")
+                    await ctx.send(embed=embed_pergunta)
 
-                    # Se a quantidade de itens na lista for menor q 1. Ele avisa que esse tema nao possui perguntas ainda e finaliza.
-                    if len(lista) < 1:
-                        await ctx.send("Esse tema ainda não possui perguntas...")
-                        end_game(str(ctx.channel.id))
-                        return
-
-                    # mistura as perguntas da lista
-                    shuffle(lista)
-
-                    # loop infinito, para sempre gerar novas perguntas, a medida que elas forem sendo respondidas
-                    while True:
-                        
+                    # função que verifica se a resposta esta correta e retorna o conteudo, caso contrario nao faz nada
+                    def check(msg):
+                        response = msg.content
                         try:
-                            # TENTA pegar na lista de perguntas a pergunta na posição n
-                            pergunta = lista[n]
-                        except IndexError:
-                            # caso a pessoa já tenha respondido todas as perguntas da lista
-                            # ele passa a pegar repetidas, de modo aleatorio
-                            pergunta = lista[randint(0, len(lista)-1)]
+                            response = response.lower()
+                        except:
+                            pass
+                        # verifica se a resposta foi enviada no mesmo chat da pergunta
+                        if(msg.channel.id == ctx.channel.id):
+                            if response in perguntas[pergunta]["resposta"] or response == ".fim":
+                                return (msg.content).strip()
 
-                        # aumentando o número do contador, sempre vai somando de 1 em 1
-                        n +=1
-
-                        # cria a msg que vai ser enviada, com o numero da pergunta, a pergunta, e o tempo para responder
-                        cor = (perguntas[pergunta]["cor"])
-                        embed_pergunta = discord.Embed(title=f'Pergunta #{n}', description=" ", colour=cor)
-                        embed_pergunta.set_image(url=perguntas[pergunta]["pergunta"])
-                        tempo = pass_to_min(perguntas[pergunta]["tempo"])
-                        embed_pergunta.set_footer(text=f"🕔 tempo para responder {tempo}min")
-                        await ctx.send(embed=embed_pergunta)
-
-                        # função que verifica se a resposta esta correta e retorna o conteudo, caso contrario nao faz nada
-                        def check(msg):
-                            response = msg.content
-                            try:
-                                response = response.lower()
-                            except:
-                                pass
-                            # verifica se a resposta foi enviada no mesmo chat da pergunta
-                            if(msg.channel.id == ctx.channel.id):
-                                if response in perguntas[pergunta]["resposta"] or response == ".fim":
-                                    return (msg.content).strip()
-
-                        # loop infinito para pegar todas as respostas que forem enviadas
-                        while True:
-
+                    # loop infinito para pegar todas as respostas que forem enviadas
+                    while True:
+                        try:
                             # pega TODAS msg enviadas por TODOS usuarios no periodo de tempo referente a pergunta, e usa a funcao check
-                            response = await self.bot.wait_for("message", check=check, timeout=perguntas[pergunta]["tempo"])
+                            # timeout=(perguntas[pergunta]["tempo"])-30) pega o tempo definido e diminui 30s que será o tempo de alerta
+                            response = await self.bot.wait_for("message", check=check, timeout=(perguntas[pergunta]["tempo"])-30)
 
                             # Se for a resposta correta vai ter um retorno do check, e envia a msg avisando que acertou
                             # também avisa que a proxima pergunta esta por vir, quebrando o loop inifinto(break) pois a pergunta foi acertada
@@ -150,19 +152,40 @@ class Game(commands.Cog):
                                 sleep(5)
                                 break
                             elif response.content == ".fim":
+                                # se a pessoa digitar  .fim  finaliza o jogo e envia a resposta
                                 resposta = perguntas[pergunta]["resposta"][0]
                                 embed_fim = discord.Embed(title="Jogo finalizado", description=f"A resposta era: {resposta}\n", colour=0x4682B4)
                                 await ctx.send(embed=embed_fim)
                                 end_game(str(ctx.channel.id))
                                 return
             
-            # ao exceder o tempo de resposta, entra aqui, finaliza o game, e envia a resposta da tal pergunta
-            except asyncio.TimeoutError:
-                resposta = perguntas[pergunta]["resposta"][0]
-                embed_fim = discord.Embed(title="Game Over.", description=f"A resposta era: {resposta}", colour=0xFF0000)
-                await ctx.send(embed=embed_fim)
-                end_game(str(ctx.channel.id))
-                return 
+                        # ao exceder o tempo de resposta, entra aqui, e envia o alerta avisando que faltam 30s
+                        except asyncio.TimeoutError:
+                            embed_alerta = discord.Embed(title="Faltam 30s", colour=0x4682B4)
+                            await ctx.send(embed=embed_alerta)
+                            try:
+                                # Faz o mesmo que nas linhas acima, mas com timeout de 30s
+                                response = await self.bot.wait_for("message", check=check, timeout=30)
+                                
+                                if response.content in perguntas[pergunta]["resposta"]:
+                                    embed_acerto = discord.Embed(title="Acertou :tada: :tada: :tada:", description=f"A resposta era {response.content}\n", colour=0x00FF00)
+                                    embed_acerto.set_footer(text="Próxima pergunta em 5s...")
+                                    await ctx.send(embed=embed_acerto)
+                                    sleep(5)
+                                    break
+                                elif response.content == ".fim":
+                                    resposta = perguntas[pergunta]["resposta"][0]
+                                    embed_fim = discord.Embed(title="Jogo finalizado", description=f"A resposta era: {resposta}\n", colour=0x4682B4)
+                                    await ctx.send(embed=embed_fim)
+                                    end_game(str(ctx.channel.id))
+                                    return
+                            except asyncio.TimeoutError:
+                                # Ao entrar no timeouterror pela segunda vez ele finaliza o jogo
+                                resposta = perguntas[pergunta]["resposta"][0]
+                                embed_fim = discord.Embed(title="Game Over.", description=f"A resposta era: {resposta}", colour=0xFF0000)
+                                await ctx.send(embed=embed_fim)
+                                end_game(str(ctx.channel.id))
+                                return 
         else:
             if ctx.message.guild.id == 1004124654392332490:
                 await ctx.send("Por favor use este comando em <#>")
