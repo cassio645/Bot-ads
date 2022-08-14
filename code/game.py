@@ -44,6 +44,13 @@ def pass_to_min(seconds):
     # convertendo segundos para minutos
 	return strftime("%M:%S", gmtime(seconds))
 
+
+def remove_space(msg):
+    # Remove alguns espaços a mais, ex: {1,    2,  3,  4} se torna {1, 2, 3, 4}
+    msg = msg.split()
+    msg = " ".join(msg)
+    return msg
+
 class Game(commands.Cog):
 
     def __init__(self, bot, game=False):
@@ -133,8 +140,9 @@ class Game(commands.Cog):
                             pass
                         # verifica se a resposta foi enviada no mesmo chat da pergunta
                         if(msg.channel.id == ctx.channel.id):
-                            if response in perguntas[pergunta]["resposta"] or response == ".fim":
-                                return (msg.content).strip()
+                            response = remove_space(response)
+                            if response in perguntas[pergunta]["resposta"] or response in [".fim", ". fim"]:
+                                return response
 
                     # loop infinito para pegar todas as respostas que forem enviadas
                     while True:
@@ -142,16 +150,17 @@ class Game(commands.Cog):
                             # pega TODAS msg enviadas por TODOS usuarios no periodo de tempo referente a pergunta, e usa a funcao check
                             # timeout=(perguntas[pergunta]["tempo"])-30) pega o tempo definido e diminui 30s que será o tempo de alerta
                             response = await self.bot.wait_for("message", check=check, timeout=(perguntas[pergunta]["tempo"])-30)
+                            response = remove_space(response.content)
 
                             # Se for a resposta correta vai ter um retorno do check, e envia a msg avisando que acertou
                             # também avisa que a proxima pergunta esta por vir, quebrando o loop inifinto(break) pois a pergunta foi acertada
-                            if response.content in perguntas[pergunta]["resposta"]:
-                                embed_acerto = discord.Embed(title="Acertou :tada: :tada: :tada:", description=f"A resposta era {response.content}\n", colour=0x00FF00)
+                            if response in perguntas[pergunta]["resposta"]:
+                                embed_acerto = discord.Embed(title="Acertou :tada: :tada: :tada:", description=f"A resposta era {response}\n", colour=0x00FF00)
                                 embed_acerto.set_footer(text="Próxima pergunta em 5s...")
                                 await ctx.send(embed=embed_acerto)
                                 sleep(5)
                                 break
-                            elif response.content == ".fim":
+                            elif response in [".fim", ". fim"]:
                                 # se a pessoa digitar  .fim  finaliza o jogo e envia a resposta
                                 resposta = perguntas[pergunta]["resposta"][0]
                                 embed_fim = discord.Embed(title="Jogo finalizado", description=f"A resposta era: {resposta}\n", colour=0x4682B4)
@@ -166,14 +175,15 @@ class Game(commands.Cog):
                             try:
                                 # Faz o mesmo que nas linhas acima, mas com timeout de 30s
                                 response = await self.bot.wait_for("message", check=check, timeout=30)
+                                response = remove_space(response.content)
                                 
-                                if response.content in perguntas[pergunta]["resposta"]:
-                                    embed_acerto = discord.Embed(title="Acertou :tada: :tada: :tada:", description=f"A resposta era {response.content}\n", colour=0x00FF00)
+                                if response in perguntas[pergunta]["resposta"]:
+                                    embed_acerto = discord.Embed(title="Acertou :tada: :tada: :tada:", description=f"A resposta era {response}\n", colour=0x00FF00)
                                     embed_acerto.set_footer(text="Próxima pergunta em 5s...")
                                     await ctx.send(embed=embed_acerto)
                                     sleep(5)
                                     break
-                                elif response.content == ".fim":
+                                elif response == ".fim":
                                     resposta = perguntas[pergunta]["resposta"][0]
                                     embed_fim = discord.Embed(title="Jogo finalizado", description=f"A resposta era: {resposta}\n", colour=0x4682B4)
                                     await ctx.send(embed=embed_fim)
