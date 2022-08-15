@@ -55,7 +55,7 @@ class Game(commands.Cog):
 
     def __init__(self, bot, game=False):
         self.bot = bot
-        self.channels = [1005542693528678447, 998717439258923162]
+        self.channels = [1005542693528678447, 998717439258923162, 1008429157371359273]
     
 
     @commands.command(name="start", aliases=["estudar"])
@@ -198,7 +198,7 @@ class Game(commands.Cog):
                                 return 
         else:
             if ctx.message.guild.id == 1004124654392332490:
-                await ctx.send("Por favor use este comando em <#>")
+                await ctx.send("Por favor use este comando em <#1008429157371359273>")
             elif ctx.message.guild.id == 1005542693063118858:
                 await ctx.send("Por favor use este comando em <#1005542693528678447>")
 
